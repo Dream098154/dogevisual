@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>dogevisual</title>
+
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      background: #000;
+      font-family: Helvetica, Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    /* 主标题 */
+    .title {
+      font-size: 64px;
+      font-weight: 600;
+      letter-spacing: -1px;
+      display: flex;
+      align-items: baseline;
+    }
+
+    /* doge：白色 */
+    .doge {
+      color: white;
+    }
+
+    /* visual：Apple Intelligence 渐变 */
+    .visual {
+      background: linear-gradient(
+        90deg,
+        #4da3ff,
+        #a855f7,
+        #ff4fd8,
+        #ffd84d
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* subtitle */
+    .sub {
+      margin-top: 12px;
+      font-size: 16px;
+      color: rgba(255,255,255,0.7);
+      letter-spacing: 0.2px;
+    }
+
+    /* Liquid Glass Button */
+    .glass-btn {
+      margin-top: 25px;
+      padding: 12px 22px;
+      border-radius: 999px;
+
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+
+      color: white;
+      font-size: 14px;
+      font-family: Helvetica, Arial, sans-serif;
+
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+
+      box-shadow:
+        0 8px 30px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .glass-btn:hover {
+      background: rgba(255,255,255,0.12);
+      transform: translateY(-1px);
+    }
+
+    .glass-btn:active {
+      transform: scale(0.98);
+    }
+
+    /* subtle noise / depth */
+    .noise {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background-image: url("https://www.transparenttextures.com/patterns/noise.png");
+      opacity: 0.03;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="noise"></div>
+
+  <div class="title">
+    <span class="doge">doge</span>
+    <span class="visual">visual</span>
+  </div>
+
+  <div class="sub">
+    local intelligence. privacy-first. no cloud.
+  </div>
+
+  <button class="glass-btn">enter</button>
+
+</body>
+</html>
