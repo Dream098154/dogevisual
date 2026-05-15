@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>dogevisual intelligence</title>
+
+<style>
+
+body{
+    margin:0;
+    height:100vh;
+    background:#000;
+    font-family: Helvetica, Arial, sans-serif;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    color:white;
+}
+
+/* ===== LAYOUT ===== */
+
+.container{
+    width:80vw;
+    max-width:900px;
+    height:85vh;
+    display:flex;
+    flex-direction:column;
+}
+
+.header{
+    font-size:22px;
+    font-weight:300;
+    margin-bottom:14px;
+}
+
+.doge{ color:white; }
+
+.aiText{
+    background: linear-gradient(
+        90deg,
+        #4da3ff,
+        #a855f7,
+        #ff4fd8,
+        #ffd84d
+    );
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+/* ===== CHAT (NO LIGHT) ===== */
+
+.chat{
+    flex:1;
+    padding:18px;
+    border-radius:18px;
+
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.06);
+
+    overflow:auto;
+}
+
+/* messages */
+
+.msg{
+    margin:10px 0;
+    font-size:15px;
+    line-height:1.5;
+
+    max-width:70%;
+    padding:10px 14px;
+
+    border-radius:18px;
+}
+
+.user{
+    background:rgba(77,163,255,0.12);
+    margin-left:auto;
+}
+
+.ai{
+    background:rgba(255,255,255,0.06);
+}
+
+/* ===== INPUT (ONLY LIGHT TARGET) ===== */
+
+.inputWrap{
+    margin-top:12px;
+    position:relative;
+
+    border-radius:999px;
+    overflow:hidden;
+}
+
+/* base glass */
+.inputGlass{
+    position:absolute;
+    inset:0;
+
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.12);
+
+    backdrop-filter: blur(22px);
+    -webkit-backdrop-filter: blur(22px);
+}
+
+/* ===== EDGE LIGHT (RIM LIGHT) ===== */
+
+.inputGlass::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+
+    background: radial-gradient(
+        220px circle at var(--lx,50%) var(--ly,50%),
+        rgba(255,255,255,0.35),
+        transparent 60%
+    );
+
+    opacity:0.9;
+    filter: blur(6px);
+}
+
+/* INNER DARK LAYER (makes edge brighter than center) */
+.inputGlass::after{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background: radial-gradient(
+        180px circle at var(--lx,50%) var(--ly,50%),
+        transparent 0%,
+        rgba(0,0,0,0.25) 70%
+    );
+}
+
+/* input text */
+input{
+    width:100%;
+    padding:14px 18px;
+
+    border:none;
+    outline:none;
+
+    background:transparent;
+    color:white;
+    font-size:14px;
+
+    position:relative;
+    border-radius:999px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <span class="doge">dogevisual </span>
+        <span class="aiText">intelligence</span>
+    </div>
+
+    <!-- CHAT (NO LIGHT AT ALL) -->
+    <div class="chat" id="chat"></div>
+
+    <!-- INPUT (ONLY LIGHT TARGET) -->
+    <div class="inputWrap">
+        <div class="inputGlass" id="inputGlass"></div>
+        <input id="input" placeholder="ask intelligence..." />
+    </div>
+
+</div>
+
+<script>
+
+const chat = document.getElementById("chat");
+const inputGlass = document.getElementById("inputGlass");
+const input = document.getElementById("input");
+
+/* messages */
+function addMsg(text, type){
+    const div = document.createElement("div");
+    div.className = "msg " + type;
+    div.innerText = text;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+}
+
+/* ===== LIGHT ONLY ON INPUT ===== */
+
+let mx = 0;
+let my = 0;
+
+document.addEventListener("mousemove", (e) => {
+    mx = e.clientX;
+    my = e.clientY;
+});
+
+function animate(){
+
+    const rect = inputGlass.getBoundingClientRect();
+
+    const x = mx - rect.left;
+    const y = my - rect.top;
+
+    inputGlass.style.setProperty("--lx", x + "px");
+    inputGlass.style.setProperty("--ly", y + "px");
+
+    requestAnimationFrame(animate);
+}
+
+animate();
+
+/* ===== AI ===== */
+
+input.addEventListener("keydown", async (e) => {
+
+    if(e.key !== "Enter") return;
+
+    const text = input.value;
+    input.value = "";
+
+    addMsg(text, "user");
+
+    const thinking = document.createElement("div");
+    thinking.className = "msg ai";
+    thinking.innerText = "thinking...";
+    chat.appendChild(thinking);
+
+    try {
+
+        const res = await fetch("http://localhost:11434/api/generate", {
+            method:"POST",
+            headers:{"Content-Type":"application/json"},
+            body: JSON.stringify({
+                model:"mistral",
+                prompt:text,
+                stream:false
+            })
+        });
+
+        const data = await res.json();
+
+        thinking.remove();
+        addMsg(data.response, "ai");
+
+    } catch (err) {
+
+        thinking.remove();
+        addMsg("ERROR: local AI not connected", "ai");
+
+    }
+
+});
+
+</script>
+
+</body>
+</html>
