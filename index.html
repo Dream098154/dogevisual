@@ -10,14 +10,15 @@ body{
     margin:0;
     height:100vh;
     background:#000;
-    overflow:hidden;
     display:flex;
     justify-content:center;
     align-items:center;
     font-family: Helvetica, Arial, sans-serif;
+    overflow:hidden;
 }
 
-/* layout */
+/* ===== LAYOUT ===== */
+
 .container{
     display:flex;
     flex-direction:column;
@@ -28,36 +29,47 @@ body{
 
 .title{
     font-size:78px;
-    font-weight:300; /* 更细 */
+    font-weight:300;
     letter-spacing:-2px;
     display:flex;
+    transition:0.4s ease;
 }
 
-/* doge = clean white */
 .doge{
     color:#fff;
     font-weight:300;
 }
 
-/* visual = subtle Apple intelligence dots */
+/* ===== VISUAL (Apple Intelligence core style) ===== */
+
 .visual{
     font-weight:300;
-    margin-left:2px;
 
     background: linear-gradient(
         90deg,
         #4da3ff,
         #a855f7,
-        #ff4fd8
+        #ff4fd8,
+        #ffd84d
     );
 
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 
-    opacity:0.95;
+    opacity:0.85;
+
+    text-shadow:
+        0 0 18px rgba(77,163,255,0.06),
+        0 0 18px rgba(168,85,247,0.05);
 }
 
-/* ===== SUB ===== */
+/* hover = intelligence activation */
+.title.active .visual{
+    opacity:1;
+    filter:brightness(1.2);
+}
+
+/* ===== SUB TEXT ===== */
 
 .sub{
     margin-top:14px;
@@ -72,7 +84,6 @@ body{
 .glass{
     margin-top:28px;
     padding:12px 26px;
-
     border-radius:999px;
 
     background:rgba(255,255,255,0.06);
@@ -89,27 +100,27 @@ body{
 
     cursor:pointer;
 
+    transition:0.25s ease;
+
     box-shadow:
         0 10px 30px rgba(0,0,0,0.5),
         inset 0 1px 0 rgba(255,255,255,0.1);
-
-    transition:0.2s ease;
 }
 
-/* soft cursor light */
+/* mouse light tracking */
 .glass::before{
     content:"";
     position:absolute;
     inset:0;
 
     background: radial-gradient(
-        180px circle at var(--x,50%) var(--y,50%),
+        200px circle at var(--x,50%) var(--y,50%),
         rgba(255,255,255,0.25),
         transparent 60%
     );
 
     opacity:0;
-    transition:opacity 0.2s;
+    transition:0.2s ease;
 }
 
 .glass:hover::before{
@@ -120,6 +131,12 @@ body{
     background:rgba(255,255,255,0.08);
 }
 
+/* ===== ANIMATION STATE ===== */
+
+.title.active{
+    transform:scale(1.01);
+}
+
 </style>
 </head>
 
@@ -127,15 +144,18 @@ body{
 
 <div class="container">
 
-    <div class="title">
+    <!-- TITLE -->
+    <div class="title" id="title">
         <span class="doge">doge</span>
         <span class="visual">visual</span>
     </div>
 
+    <!-- SLOGAN -->
     <div class="sub">
         local intelligence. privacy-first. no cloud.
     </div>
 
+    <!-- BUTTON -->
     <div class="glass" id="glass">
         enter intelligence
     </div>
@@ -143,6 +163,21 @@ body{
 </div>
 
 <script>
+
+/* ===== intelligence hover ===== */
+
+const title = document.getElementById("title");
+const visual = document.querySelector(".visual");
+
+visual.addEventListener("mouseenter", () => {
+    title.classList.add("active");
+});
+
+visual.addEventListener("mouseleave", () => {
+    title.classList.remove("active");
+});
+
+/* ===== glass light follow ===== */
 
 const glass = document.getElementById("glass");
 
