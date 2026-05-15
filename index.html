@@ -1,116 +1,164 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>dogevisual</title>
+<meta charset="UTF-8">
+<title>dogevisual</title>
 
-  <style>
-    body {
-      margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      flex-direction: column;
-      background: #000;
-      font-family: Helvetica, Arial, sans-serif;
-      overflow: hidden;
-    }
+<style>
 
-    /* 主标题 */
-    .title {
-      font-size: 64px;
-      font-weight: 600;
-      letter-spacing: -1px;
-      display: flex;
-      align-items: baseline;
-    }
+body{
+    margin:0;
+    height:100vh;
+    background:#000;
+    overflow:hidden;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-family: Helvetica, Arial, sans-serif;
+}
 
-    /* doge：白色 */
-    .doge {
-      color: white;
-    }
+/* layout */
+.container{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+}
 
-    /* visual：Apple Intelligence 渐变 */
-    .visual {
-      background: linear-gradient(
+/* ===== TITLE ===== */
+
+.title{
+    font-size:78px;
+    font-weight:300; /* 更细 */
+    letter-spacing:-2px;
+    display:flex;
+}
+
+/* doge = clean white */
+.doge{
+    color:#fff;
+    font-weight:300;
+}
+
+/* visual = subtle Apple intelligence dots */
+.visual{
+    font-weight:300;
+    margin-left:2px;
+
+    background: linear-gradient(
         90deg,
         #4da3ff,
         #a855f7,
-        #ff4fd8,
-        #ffd84d
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+        #ff4fd8
+    );
 
-    /* subtitle */
-    .sub {
-      margin-top: 12px;
-      font-size: 16px;
-      color: rgba(255,255,255,0.7);
-      letter-spacing: 0.2px;
-    }
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
 
-    /* Liquid Glass Button */
-    .glass-btn {
-      margin-top: 25px;
-      padding: 12px 22px;
-      border-radius: 999px;
+    opacity:0.95;
+}
 
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
+/* ===== SUB ===== */
 
-      color: white;
-      font-size: 14px;
-      font-family: Helvetica, Arial, sans-serif;
+.sub{
+    margin-top:14px;
+    font-size:15px;
+    color:rgba(255,255,255,0.55);
+    letter-spacing:0.2px;
+    font-weight:300;
+}
 
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+/* ===== GLASS BUTTON ===== */
 
-      box-shadow:
-        0 8px 30px rgba(0,0,0,0.5),
-        inset 0 1px 0 rgba(255,255,255,0.2);
+.glass{
+    margin-top:28px;
+    padding:12px 26px;
 
-      cursor: pointer;
-      transition: all 0.25s ease;
-    }
+    border-radius:999px;
 
-    .glass-btn:hover {
-      background: rgba(255,255,255,0.12);
-      transform: translateY(-1px);
-    }
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.12);
 
-    .glass-btn:active {
-      transform: scale(0.98);
-    }
+    color:white;
+    font-weight:300;
 
-    /* subtle noise / depth */
-    .noise {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background-image: url("https://www.transparenttextures.com/patterns/noise.png");
-      opacity: 0.03;
-      pointer-events: none;
-    }
-  </style>
+    backdrop-filter:blur(18px);
+    -webkit-backdrop-filter:blur(18px);
+
+    position:relative;
+    overflow:hidden;
+
+    cursor:pointer;
+
+    box-shadow:
+        0 10px 30px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(255,255,255,0.1);
+
+    transition:0.2s ease;
+}
+
+/* soft cursor light */
+.glass::before{
+    content:"";
+    position:absolute;
+    inset:0;
+
+    background: radial-gradient(
+        180px circle at var(--x,50%) var(--y,50%),
+        rgba(255,255,255,0.25),
+        transparent 60%
+    );
+
+    opacity:0;
+    transition:opacity 0.2s;
+}
+
+.glass:hover::before{
+    opacity:1;
+}
+
+.glass:hover{
+    background:rgba(255,255,255,0.08);
+}
+
+</style>
 </head>
 
 <body>
 
-  <div class="noise"></div>
+<div class="container">
 
-  <div class="title">
-    <span class="doge">doge</span>
-    <span class="visual">visual</span>
-  </div>
+    <div class="title">
+        <span class="doge">doge</span>
+        <span class="visual">visual</span>
+    </div>
 
-  <div class="sub">
-    local intelligence. privacy-first. no cloud.
-  </div>
+    <div class="sub">
+        local intelligence. privacy-first. no cloud.
+    </div>
 
-  <button class="glass-btn">enter</button>
+    <div class="glass" id="glass">
+        enter intelligence
+    </div>
+
+</div>
+
+<script>
+
+const glass = document.getElementById("glass");
+
+glass.addEventListener("mousemove", (e) => {
+
+    const rect = glass.getBoundingClientRect();
+
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    glass.style.setProperty("--x", x + "px");
+    glass.style.setProperty("--y", y + "px");
+
+});
+
+</script>
 
 </body>
 </html>
